@@ -4,6 +4,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 const Product = require('../models/product')
+const checkAuth = require('../middleware/check-auth')
 
 router.get('/', (req,res,next) => {
 Product.find()
@@ -21,7 +22,7 @@ Product.find()
 });
 
 
-router.post('/', (req,res,next) => {
+router.post('/',checkAuth, (req,res,next) => {
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
@@ -70,7 +71,9 @@ Product.findByIdAndUpdate(id, { $set: req.body }, { new: true})
 .exec()
 .then(result => {
 console.log(result)
-res.status(200).json(result)
+res.status(200).json(
+    result
+    )
 })
 .catch(err => {
     res.status(500).json({
@@ -84,7 +87,9 @@ router.delete('/:productId', (req,res,next) => {
    Product.findByIdAndRemove(id)
    .exec()
    .then(result => {
-    res.status(200).json(result)
+    res.status(200).json(
+        result
+        )
    })
    .catch(err => {
     console.log(err)
