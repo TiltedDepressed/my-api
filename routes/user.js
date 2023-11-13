@@ -9,6 +9,7 @@ const checkAuth = require('../middleware/check-auth');
 
 router.get('/', (req,res,next) => {
 User.find()
+.select("_id login password role email")
 .exec()
 .then(docs=>{
     console.log(docs)
@@ -110,7 +111,24 @@ router.post('/login',(req,res,next) => {
     })
 })
 
-router.delete('/:userId' ,checkAuth, (req, res, next) => {
+router.post('/update/:userId', checkAuth, (req,res,next) => {
+    const id = req.params.userId
+User.findByIdAndUpdate(id, { $set: req.body }, { new: true })
+.exec()
+.then(result => {
+console.log(result)
+res.status(200).json(
+    result
+    )
+})
+.catch(err => {
+    res.status(500).json({
+        error: err
+    })
+})
+});
+
+router.post('/delete/:userId' ,checkAuth, (req, res, next) => {
     const id = req.params.userId
     User.findByIdAndRemove(id)
     .exec()
