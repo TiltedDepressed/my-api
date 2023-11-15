@@ -154,6 +154,7 @@ router.post('/:userId', checkAuth, (req, res, next) => {
         console.log(doc)
         if(doc) {
             res.status(200).json({
+                _id: doc.id,
                 login: doc.login,
                 role: doc.role,
                 email: doc.email
