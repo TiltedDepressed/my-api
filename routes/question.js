@@ -5,8 +5,9 @@ const mongoose = require('mongoose');
 const Question = require('../models/question')
 const checkAuth = require('../middleware/check-auth')
 
-router.get('/', (req,res,next) => {
+router.post('/questions', checkAuth, (req,res,next) => {
 Question.find()
+.select("_id question")
 .exec()
 .then(result => {
     console.log(result)
@@ -24,13 +25,15 @@ Question.find()
 
 router.post('/:questionId', checkAuth, (req,res,next) =>{
     const id = req.params.questionId
-    Question.find(id)
+    Question.findById(id)
+    .select("question")
     .exec()
     .then(result => {
         console.log(result)
         if(result){
             res.status(200).json({
-                result
+                _id: result._id,
+                question: result.question
             })
         } else{
             res.status(404).json({
@@ -40,26 +43,25 @@ router.post('/:questionId', checkAuth, (req,res,next) =>{
     })
     .catch(err => {
         console.log(err)
-        res.status(500).json({eror:err})
+        res.status(500).json({error:err})
     })
 
 })
 
-router.post('/create', checkAuth, (req,res,next) => {
-    const question = new Question({
+router.post('/', checkAuth, (req, res, next) => {
+   
+    const newQuestion = new Question({
         _id: new mongoose.Types.ObjectId(),
         question: req.body.question
-    });
-    question
-    .save()
-    .then(result => {
+    })
+
+    newQuestion.save().then(result => {
         console.log(result);
         res.status(201).json({
             message: 'Question created',
-            createdQuestion: question
+            createdQuestion: newQuestion
         })
-    })
-    .catch(err => {
+    }).catch(err => {
         console.log(err)
         res.status(500).json({
             error: err
