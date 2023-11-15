@@ -169,4 +169,26 @@ router.post('/:userId', checkAuth, (req, res, next) => {
     })
 })
 
+router.post('/role/:role', checkAuth, (req, res, next) => {
+    const role = req.params.role
+    User.find({
+        role: role
+    })
+    .exec()
+    .then(result => {
+        console.log(result)
+        if(result) {
+            res.status(200).json({
+                result
+            });
+        } else{
+            res.status(404).json({message: 'No valid entry found for provided role'})
+        }
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({error:err})
+    })
+})
+
 module.exports = router;
