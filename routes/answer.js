@@ -6,7 +6,7 @@ const Answer = require('../models/answer')
 const Question = require('../models/question')
 const checkAuth = require('../middleware/check-auth')
 
-router.get('/', (req,res,next) => {
+router.post('/', checkAuth, (req,res,next) => {
 Answer.find()
 .exec()
 .then(result => {
