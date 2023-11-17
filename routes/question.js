@@ -23,6 +23,28 @@ Question.find()
 })
 })
 
+router.post('/questions/random/:count', checkAuth, (req,res,next) => {
+     Question.find()
+    .select("_id question")
+    .exec()
+    .then(doc => {
+       // const generated = result[Math.floor(Math.random() * result.length)]
+        const result = doc.sort( () => Math.random() - Math.random()).slice(0,req.params.count)
+        res.status(200).json({
+            result
+        })
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({
+            error: err
+        })
+    })
+    })
+
+
+
+
 router.post('/:questionId', checkAuth, (req,res,next) =>{
     const id = req.params.questionId
     Question.findById(id)

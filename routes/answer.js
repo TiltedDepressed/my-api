@@ -80,12 +80,16 @@ router.post("/find/:questionId", checkAuth, (req,res,next) => {
 router.post("/:answerId", checkAuth,(req,res,next)=>{
     const id = req.params.answerId
     Answer.findById(id)
+    .select("_id answer points question")
     .exec()
     .then(result => {
         console.log(result)
         if(result){
             res.status(200).json({
-                result
+                _id: result._id,
+                answer: result.answer,
+                points: result.points,
+                question: result.question
             })
         } else{
             res.status(404).json({
