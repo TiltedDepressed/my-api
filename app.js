@@ -9,6 +9,7 @@ const orderRoutes = require("./routes/orders");
 const userRoutes = require("./routes/user")
 const answerRoutes = require("./routes/answer")
 const questionRoutes = require("./routes/question")
+const resultRoutes = require("./routes/result")
 
 mongoose.connect("mongodb+srv://tosltikov52:"+process.env.MONGO_ATLAS_PW+"@node-rest-api.a00tx5j.mongodb.net/?retryWrites=true&w=majority")
 
@@ -31,6 +32,7 @@ app.use('/orders', orderRoutes);
 app.use('/user', userRoutes)
 app.use('/answer', answerRoutes)
 app.use('/question', questionRoutes)
+app.use('/result',resultRoutes)
 
 app.use((req,res,next) => {
     const error = new Error('Not found');
