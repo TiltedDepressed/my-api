@@ -24,10 +24,10 @@ Answer.find()
 })
 
 router.post('/create', checkAuth, (req,res,next) => {
-    Question.findById(req.body.questionId).then(question => {
+    const id = req.body.questionId
+    Question.findById(id).then(question => {
             return answer
             .save()
-            .exec()
             .then(result => {
                 console.log(result);
                 res.status(201).json(result)  
@@ -40,8 +40,9 @@ router.post('/create', checkAuth, (req,res,next) => {
              })
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json({
-               message: 'Product not found',
+               message: 'Question not found',
                error: err
             })
          })
@@ -50,6 +51,29 @@ router.post('/create', checkAuth, (req,res,next) => {
         answer: req.body.answer,
         points: req.body.points,
         question: req.body.questionId
+    })
+})
+
+router.post("/find/:questionId", checkAuth, (req,res,next) => {
+    const id = req.params.questionId
+    Answer.find({question: id})
+    .select("_id answer points question")
+    .exec()
+    .then(result => {
+        console.log(result)
+        if(result){
+            res.status(200).json({
+                result
+            })
+        } else{
+            res.status(404).json({
+                message: 'No valid entry found for provided ID'
+            })
+        }
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({eror:err})
     })
 })
 
@@ -81,7 +105,7 @@ router.post("/delete/:answerId", checkAuth,(req,res,next)=>{
     .exec()
     .then(result => {
         res.status(200).json({
-            message: "question deleted"
+            message: "answer deleted"
         })
     })
     .catch(err => {
