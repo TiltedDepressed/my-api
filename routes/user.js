@@ -146,6 +146,7 @@ router.post('/delete/:userId' ,checkAuth, (req, res, next) => {
     })
 })
 
+// get user by user id
 router.post('/:userId', checkAuth, (req, res, next) => {
     const id = req.params.userId
     User.findById(id)
