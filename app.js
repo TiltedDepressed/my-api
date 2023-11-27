@@ -12,7 +12,7 @@ const answerRoutes = require("./routes/answer")
 const questionRoutes = require("./routes/question")
 const resultRoutes = require("./routes/result")
 
-mongoose.connect("mongodb+srv://tosltikov52:"+process.env.MONGO_ATLAS_PW+"@node-rest-api.a00tx5j.mongodb.net/?retryWrites=true&w=majority")
+mongoose.connect("mongodb+srv://tosltikov52:"+"Tviq0NVVrC7WIHn2"+"@node-rest-api.a00tx5j.mongodb.net/?retryWrites=true&w=majority")
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}))
