@@ -9,7 +9,7 @@ const checkAuth = require('../middleware/check-auth');
 
 router.get('/', (req,res,next) => {
 User.find()
-.select("_id login password role email")
+.select("_id login password role email pin language")
 .exec()
 .then(docs=>{
     console.log(docs)
@@ -44,7 +44,9 @@ router.post('/signup', (req,res,next)=>{
                         login: req.body.login,
                         password: hash,
                         email:req.body.email,
-                        role: req.body.role
+                        role: req.body.role,
+                        pin:req.body.pin,
+                        language: req.body.language
                     })
                     user
                     .save()
@@ -147,7 +149,7 @@ router.post('/delete/:userId' ,checkAuth, (req, res, next) => {
 })
 
 // get user by user id
-router.post('/:userId', checkAuth, (req, res, next) => {
+router.post('/:userId', checkAuth ,   (req, res, next) => {
     const id = req.params.userId
     User.findById(id)
     .exec()
@@ -158,7 +160,9 @@ router.post('/:userId', checkAuth, (req, res, next) => {
                 _id: doc.id,
                 login: doc.login,
                 role: doc.role,
-                email: doc.email
+                email: doc.email,
+                pin: doc.pin,
+                language: doc.language
                 
             });
         } else{
